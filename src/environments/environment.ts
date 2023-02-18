@@ -8,6 +8,7 @@ export const environment = {
     authDomain: 'income-expenses-app-804fc.firebaseapp.com',
     messagingSenderId: '604447632390',
     measurementId: 'G-PKCW1R7MCY',
+    databaseURL: 'https://income-expenses-app-804fc-default-rtdb.firebaseio.com'
   },
   production: false
 };
