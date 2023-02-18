@@ -10,6 +10,7 @@ import {environment} from '../environments/environment';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {AngularFireModule} from "@angular/fire/compat";
 
 @NgModule({
   declarations: [
@@ -18,11 +19,8 @@ import {AppComponent} from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAnalytics(() => getAnalytics()),
-    provideAuth(() => getAuth()),
-    provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore())
+
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [
     ScreenTrackingService,UserTrackingService
