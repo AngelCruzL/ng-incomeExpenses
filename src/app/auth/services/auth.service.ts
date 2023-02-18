@@ -17,11 +17,15 @@ export class AuthService {
   constructor(private auth: AngularFireAuth) {
   }
 
-  createUser({name, email, password}: CreateUserData) {
+  createUser({email, password}: CreateUserData) {
     return this.auth.createUserWithEmailAndPassword(email, password)
   }
 
   loginUser({email, password}: LoginUserData) {
     return this.auth.signInWithEmailAndPassword(email, password)
+  }
+
+  logout() {
+    return this.auth.signOut()
   }
 }
