@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "income-expenses-app-804fc": {
+      "hosting": {
+        "incomeExpenses": [
+          "income-expenses-app-804fc"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "income-expenses-app-804fc"
+  }
+}
