@@ -1,29 +1,39 @@
 import {Injectable} from '@angular/core';
-import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "@angular/fire/auth";
+import {addDoc, collection, Firestore} from "@angular/fire/firestore";
 import {map} from "rxjs/operators";
 
 import {CreateUserData, LoginUserData} from "../types/user";
+import {User} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private auth: AngularFireAuth) {
+  constructor(private auth: Auth, private firestore: Firestore) {
   }
 
   initAuthListener() {
-    this.auth.authState.subscribe(fuser => {
-      console.log(fuser)
-    })
+    return authState(this.auth)
   }
 
-  createUser({email, password}: CreateUserData) {
-    return this.auth.createUserWithEmailAndPassword(email, password)
+  createUser({name, email, password}: CreateUserData) {
+    return createUserWithEmailAndPassword(this.auth, email, password)
+      .then(({user}) => {
+        console.log(user);
+        const newUser = new User(name, user.email!, user.uid!);
+        const userRef = collection(this.firestore, `user`);
+        addDoc(userRef, {...newUser}).then(console.log)
+      })
+      .catch(error => {
+        console.log(error);
+        throw error;
+      })
   }
 
   loginUser({email, password}: LoginUserData) {
-    return this.auth.signInWithEmailAndPassword(email, password)
+    return signInWithEmailAndPassword(this.auth, email, password)
   }
 
   logout() {
@@ -31,6 +41,6 @@ export class AuthService {
   }
 
   isAuth() {
-    return this.auth.authState.pipe(map(fuser => fuser != null))
+    return authState(this.auth).pipe(map(fuser => fuser != null))
   }
 }

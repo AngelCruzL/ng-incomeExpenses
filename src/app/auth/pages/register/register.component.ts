@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import Swal from 'sweetalert2'
-import {getTranslatedError} from '@nafuzi/firebase-auth-error-translator'
 
 import {AuthService} from "../../services/auth.service";
 
@@ -45,8 +44,8 @@ export class RegisterComponent implements OnInit {
     this.authService.createUser(this.registerForm.value)
       .then(credentials => {
         Swal.close();
-        console.log(credentials)
         this.router.navigate(['/'])
+        console.log(credentials)
       })
       .catch(error => {
         if(error.message.includes('(auth/weak-password)')){
