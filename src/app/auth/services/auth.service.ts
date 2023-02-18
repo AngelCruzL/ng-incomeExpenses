@@ -1,13 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 
-type CreateUserData = {
-  name: string,
-  email: string,
-  password: string
-}
-
-type LoginUserData = Omit<CreateUserData, "name">
+import {CreateUserData, LoginUserData} from "../types/user";
 
 @Injectable({
   providedIn: 'root'
