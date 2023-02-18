@@ -7,13 +7,9 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: 'dashboard',
+    path: '',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
-  },
-  {
-    path: 'ingreso-egreso',
-    loadChildren: () => import('./income-expenses/income-expenses.module').then(m => m.IncomeExpensesModule)
-  },
+  }
 ];
 
 @NgModule({
