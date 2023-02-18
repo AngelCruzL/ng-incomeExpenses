@@ -7,6 +7,8 @@ type CreateUserData = {
   password: string
 }
 
+type LoginUserData = Omit<CreateUserData, "name">
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,5 +19,9 @@ export class AuthService {
 
   createUser({name, email, password}: CreateUserData) {
     return this.auth.createUserWithEmailAndPassword(email, password)
+  }
+
+  loginUser({email, password}: LoginUserData) {
+    return this.auth.signInWithEmailAndPassword(email, password)
   }
 }

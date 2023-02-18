@@ -1,13 +1,22 @@
 <h2 class="text-center mb-4">Ingresar</h2>
 
 <div class="auto-form-wrapper">
-  <form action="#">
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="form-group">
       <label class="label" for="username">Usuario</label>
       <div class="input-group">
-        <input type="email" id="username" class="form-control" placeholder="Email">
+        <input
+          type="email"
+          id="username"
+          class="form-control"
+          placeholder="Email"
+          formControlName="email"
+        >
+
         <div class="input-group-append">
-          <span class="input-group-text"><i class="fa fa-check-circle"></i></span>
+           <span class="input-group-text">
+            <i *ngIf="isValidField('email')" class="fa fa-check-circle"></i>
+          </span>
         </div>
       </div>
     </div>
@@ -15,15 +24,30 @@
     <div class="form-group">
       <label class="label" for="password">Contraseña</label>
       <div class="input-group">
-        <input type="password" id="password" class="form-control" placeholder="*********">
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="*********"
+          formControlName="password"
+        >
+
         <div class="input-group-append">
-          <span class="input-group-text"><i class="fa fa-check-circle"></i></span>
+           <span class="input-group-text">
+            <i *ngIf="isValidField('password')" class="fa fa-check-circle"></i>
+          </span>
         </div>
       </div>
     </div>
 
     <div class="form-group">
-      <button class="btn btn-primary submit-btn btn-block">Login</button>
+      <button
+        type="submit"
+        class="btn btn-primary submit-btn btn-block"
+        [disabled]="!loginForm.valid"
+      >
+        Login
+      </button>
     </div>
 
     <div class="text-block text-center my-3">
