@@ -1,21 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+
+import {Store} from "@ngrx/store";
+import * as ui from "@shared/state/ui.actions";
+import {AppState} from "@app/app.reducer";
+
+import {Subscription} from "rxjs";
+
 import Swal from 'sweetalert2'
 
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "@auth/services/auth.service";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styles: []
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
+  isLoading!: boolean;
+  uiSubscription!: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private store: Store<AppState>,
     private router: Router) {
   }
 
@@ -25,6 +35,12 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     })
+
+    this.uiSubscription = this.store.select('ui').subscribe(ui => this.isLoading = ui.isLoading)
+  }
+
+  ngOnDestroy() {
+    this.uiSubscription.unsubscribe();
   }
 
   isValidField(field: string): boolean {
@@ -34,25 +50,30 @@ export class RegisterComponent implements OnInit {
   createAccount() {
     if (this.registerForm.invalid) return;
 
-     Swal.fire({
-        title: 'Espere por favor...',
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
+    this.store.dispatch(ui.isLoading());
+
+    // Swal.fire({
+    //   title: 'Espere por favor...',
+    //   didOpen: () => {
+    //     Swal.showLoading();
+    //   }
+    // });
 
     this.authService.createUser(this.registerForm.value)
       .then(credentials => {
-        Swal.close();
+        // Swal.close();
+        this.store.dispatch(ui.stopLoading());
         this.router.navigate(['/'])
         console.log(credentials)
       })
       .catch(error => {
-        if(error.message.includes('(auth/weak-password)')){
+        this.store.dispatch(ui.stopLoading());
+
+        if (error.message.includes('(auth/weak-password)')) {
           error.message = 'La contraseña debe tener al menos 6 caracteres.'
         }
 
-        if(error.message.includes('(auth/email-already-in-use)')){
+        if (error.message.includes('(auth/email-already-in-use)')) {
           error.message = 'El correo electrónico ya existe.'
         }
 
