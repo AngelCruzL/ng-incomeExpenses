@@ -64,8 +64,18 @@
         type="submit"
         class="btn btn-primary submit-btn btn-block"
         [disabled]="registerForm.invalid"
+        *ngIf="!isLoading"
       >
         Crear cuenta
+      </button>
+
+      <button
+        class="btn btn-primary submit-btn btn-block"
+        disabled
+        *ngIf="isLoading"
+      >
+        <i class="fa fa-sync fa-spin"></i>
+        Espere...
       </button>
     </div>
     <div class="text-block text-center my-3">
