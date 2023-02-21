@@ -8,6 +8,9 @@ import {IncomeExpensesComponent} from './pages/income-expenses/income-expenses.c
 import {StatisticsComponent} from './pages/statistics/statistics.component';
 import {DetailsComponent} from './pages/details/details.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {StoreModule} from "@ngrx/store";
+
+import {incomeExpenseReducer} from "@app/dashboard/state/income-expense.reducer";
 
 
 @NgModule({
@@ -21,7 +24,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forFeature('incomeExpense', incomeExpenseReducer)
   ]
 })
 export class DashboardModule {
