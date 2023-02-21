@@ -3,41 +3,57 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Agregar Ingreso / Egreso</h4>
-        <p class="card-description">Especifique el monto y el tipo</p>
+        <p class="card-description mb-4">Especifique el monto y el tipo</p>
 
-        <form>
+        <form [formGroup]="incomeExpensesForm" (ngSubmit)="save()">
           <div class="form-group">
-            <label>Descripción</label>
+            <label for="description">Descripción</label>
             <input
               type="text"
               class="form-control"
               placeholder="Descripción"
-              name="descripcion"
+              id="description"
+              formControlName="description"
             />
           </div>
 
           <div class="form-group">
-            <label>Monto</label>
+            <label for="amount">Monto</label>
             <input
               type="number"
               class="form-control"
               placeholder="Monto"
-              name="monto"
+              id="amount"
+              formControlName="amount"
             />
             <p>Debe de ser un monto positivo</p>
           </div>
 
           <div class="form-group">
             <label>Tipo</label>
-            <br />
-            <button type="button" class="btn btn-primary btn-block">
+            <br/>
+
+            <button
+              type="button"
+              class="btn btn-primary btn-block"
+              *ngIf="type === 'income'"
+              (click)="type = 'expense'"
+            >
               Ingreso
             </button>
-            <!-- <button type="button" class="btn btn-warning btn-block">Egreso</button> -->
+
+            <button
+              type="button"
+              class="btn btn-warning btn-block"
+              (click)="type = 'income'"
+              *ngIf="type === 'expense'"
+            >
+              Egreso
+            </button>
           </div>
 
-          <hr />
-          <button type="button" class="btn btn-success mr-2">
+          <hr/>
+          <button [disabled]="incomeExpensesForm.invalid" type="submit" class="btn btn-success mr-2">
             <i class="fa fa-save"></i>
             Agregar
           </button>

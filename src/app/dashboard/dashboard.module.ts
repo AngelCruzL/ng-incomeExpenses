@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DashboardComponent } from './dashboard.component';
-import {SharedModule} from "../shared/shared.module";
-import { IncomeExpensesComponent } from './pages/income-expenses/income-expenses.component';
-import { StatisticsComponent } from './pages/statistics/statistics.component';
-import { DetailsComponent } from './pages/details/details.component';
+import {DashboardRoutingModule} from './dashboard-routing.module';
+import {DashboardComponent} from './dashboard.component';
+import {SharedModule} from "@shared/shared.module";
+import {IncomeExpensesComponent} from './pages/income-expenses/income-expenses.component';
+import {StatisticsComponent} from './pages/statistics/statistics.component';
+import {DetailsComponent} from './pages/details/details.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { DetailsComponent } from './pages/details/details.component';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
-export class DashboardModule { }
+export class DashboardModule {
+}
