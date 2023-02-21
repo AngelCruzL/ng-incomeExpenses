@@ -17,6 +17,7 @@ import {UserFirebase} from "@auth/types/user-firebase";
 })
 export class AuthService {
   userSubscription!: Subscription;
+  #currentUser!: User;
 
   constructor(
     private auth: Auth,
@@ -30,7 +31,9 @@ export class AuthService {
 
       this.userSubscription = this.getUserById(fuser.uid).subscribe(user => {
         if (user.length > 0) {
-          this.store.dispatch(authActions.setUser({user: User.fromFirebase(user[0])}))
+          const newUser = {...user[0], uid: fuser.uid}
+          this.store.dispatch(authActions.setUser({user: newUser}))
+          this.#currentUser = newUser;
         } else {
           this.cleanUserStateAndSubscription()
         }
@@ -43,7 +46,7 @@ export class AuthService {
       .then(({user}) => {
         console.log(user);
         const newUser = new User(name, user.email!, user.uid!);
-        const userRef = collection(this.firestore, `user`);
+        const userRef = collection(this.firestore, user.uid);
         addDoc(userRef, {...newUser}).then(console.log)
       })
       .catch(error => {
@@ -72,5 +75,9 @@ export class AuthService {
   cleanUserStateAndSubscription() {
     this.store.dispatch(authActions.unSetUser());
     this.userSubscription?.unsubscribe();
+  }
+
+  get currentUser() {
+    return {...this.#currentUser}
   }
 }
