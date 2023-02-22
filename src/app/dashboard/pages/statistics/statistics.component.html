@@ -71,4 +71,19 @@
       </div>
     </div>
   </div>
+
+  <div class="col-12 p-5" *ngIf="incomes > 0 || expenses > 0">
+    <div class="card card-statistics">
+      <div class="card-body">
+        <h1 class="card-title">Gráfica</h1>
+
+        <canvas
+          baseChart
+          class="chart"
+          [data]="doughnutChartData"
+          type="doughnut">
+        </canvas>
+      </div>
+    </div>
+  </div>
 </div>

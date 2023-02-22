@@ -9,10 +9,11 @@ import {StatisticsComponent} from './pages/statistics/statistics.component';
 import {DetailsComponent} from './pages/details/details.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {StoreModule} from "@ngrx/store";
+import {NgChartsModule} from 'ng2-charts';
 
 import {incomeExpenseReducer} from "@app/dashboard/state/income-expense.reducer";
-import { IncomeExpensePipe } from './pipes/income-expense.pipe';
-import { SortIncomeExpensesPipe } from './pipes/sort-income-expenses.pipe';
+import {IncomeExpensePipe} from './pipes/income-expense.pipe';
+import {SortIncomeExpensesPipe} from './pipes/sort-income-expenses.pipe';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { SortIncomeExpensesPipe } from './pipes/sort-income-expenses.pipe';
     DashboardRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    StoreModule.forFeature('incomeExpense', incomeExpenseReducer)
+    StoreModule.forFeature('incomeExpense', incomeExpenseReducer),
+    NgChartsModule
   ]
 })
 export class DashboardModule {

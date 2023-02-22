@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
+
 import {Store} from "@ngrx/store";
 import {AppStateWithIncomeExpense} from "@app/dashboard/state/income-expense.reducer";
 import {IncomeExpenses} from "@app/dashboard/models/income-expenses.model";
+
+import {ChartData} from 'chart.js';
 
 @Component({
   selector: 'app-statistics',
@@ -13,6 +16,14 @@ export class StatisticsComponent implements OnInit {
   expenses: number = 0;
   totalIncomes: number = 0;
   totalExpenses: number = 0;
+
+  public doughnutChartLabels: string[] = ['Ingresos', 'Egresos'];
+  public doughnutChartData: ChartData<'doughnut'> = {
+    labels: this.doughnutChartLabels,
+    datasets: [
+      {data: []}
+    ]
+  };
 
   constructor(private store: Store<AppStateWithIncomeExpense>) {
   }
@@ -31,5 +42,7 @@ export class StatisticsComponent implements OnInit {
         this.expenses++;
       }
     }
+
+    this.doughnutChartData.datasets = [{data: [this.totalIncomes, this.totalExpenses]}];
   }
 }
