@@ -7,6 +7,7 @@ import {map} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {AppState} from "@app/app.reducer";
 import * as authActions from "@auth/state/auth.actions";
+import * as incomeExpenseActions from "@app/dashboard/state/income-expense.actions";
 
 import {CreateUserData, LoginUserData} from "../types/user";
 import {User} from "../models/user.model";
@@ -74,6 +75,7 @@ export class AuthService {
 
   cleanUserStateAndSubscription() {
     this.store.dispatch(authActions.unSetUser());
+    this.store.dispatch(incomeExpenseActions.unSetItems())
     this.userSubscription?.unsubscribe();
   }
 
