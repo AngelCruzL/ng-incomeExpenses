@@ -9,7 +9,7 @@
           <div class="float-right">
             <p class="mb-0 text-right">Ingresos</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
+              <h3 class="font-weight-medium text-right mb-0">{{totalIncomes|currency}}</h3>
             </div>
           </div>
         </div>
@@ -29,9 +29,9 @@
             <i class="fa fa-shipping-fast text-danger icon-lg"></i>
           </div>
           <div class="float-right">
-            <p class="mb-0 text-right">Ingresos</p>
+            <p class="mb-0 text-right">Egresos</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
+              <h3 class="font-weight-medium text-right mb-0">{{totalExpenses|currency}}</h3>
             </div>
           </div>
         </div>
@@ -39,6 +39,35 @@
           <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> 65%
           lower growth
         </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row m-5">
+
+  <div class="col-12">
+    <div class="card card-statistics">
+      <div class="card-body">
+
+        <div class="clearfix">
+          <div class="float-left">
+            <i class="fa fa-building text-info icon-lg"></i>
+          </div>
+          <div class="float-right">
+            <p class="mb-0 text-right">Diferencia</p>
+            <div class="fluid-container">
+              <h3 [ngClass]="{
+                      'text-success': totalIncomes - totalExpenses >= 0,
+                      'text-danger': totalIncomes - totalExpenses < 0
+                    }"
+                  class="font-weight-medium text-right mb-0">
+                {{ totalIncomes - totalExpenses | currency }}
+              </h3>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
