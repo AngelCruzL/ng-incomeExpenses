@@ -15,7 +15,7 @@
           </thead>
 
           <tbody>
-          <tr *ngFor="let item of incomeExpenses">
+          <tr *ngFor="let item of incomeExpenses | sortIncomeExpenses">
             <td>{{item.description}}</td>
             <td>{{item.amount|currency}}</td>
             <td [class]="item.type === 'income' ? 'text-success' : 'text-danger'">

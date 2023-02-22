@@ -12,6 +12,7 @@ import {StoreModule} from "@ngrx/store";
 
 import {incomeExpenseReducer} from "@app/dashboard/state/income-expense.reducer";
 import { IncomeExpensePipe } from './pipes/income-expense.pipe';
+import { SortIncomeExpensesPipe } from './pipes/sort-income-expenses.pipe';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { IncomeExpensePipe } from './pipes/income-expense.pipe';
     IncomeExpensesComponent,
     StatisticsComponent,
     DetailsComponent,
-    IncomeExpensePipe
+    IncomeExpensePipe,
+    SortIncomeExpensesPipe
   ],
   imports: [
     CommonModule,
