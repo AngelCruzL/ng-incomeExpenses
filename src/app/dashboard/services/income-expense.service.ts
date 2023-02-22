@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {addDoc, collection, collectionData, Firestore} from "@angular/fire/firestore";
+import {addDoc, collection, collectionData, deleteDoc, doc, Firestore} from "@angular/fire/firestore";
 
 import {IncomeExpenses} from "../models/income-expenses.model";
 import {AuthService} from "@auth/services/auth.service";
@@ -27,5 +27,11 @@ export class IncomeExpenseService {
   getIncomeExpensesByUser(userId: string) {
     const incomeExpenseRef = collection(this.firestore, userId);
     return collectionData(incomeExpenseRef, {idField: 'uid'}) as Observable<IncomeExpenses[]>;
+  }
+
+  deleteIncomeExpense(incomeExpenseId: string) {
+    this.currentUserId = this.authService.currentUser.uid;
+    const docRef = doc(this.firestore, `${this.currentUserId}/${incomeExpenseId}`);
+    return deleteDoc(docRef)
   }
 }

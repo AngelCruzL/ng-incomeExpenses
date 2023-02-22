@@ -4,6 +4,8 @@ import {IncomeExpenses} from "@app/dashboard/models/income-expenses.model";
 import {Store} from "@ngrx/store";
 import {AppStateWithIncomeExpense} from "@app/dashboard/state/income-expense.reducer";
 import {Subscription} from "rxjs";
+import {IncomeExpenseService} from "@app/dashboard/services/income-expense.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-details',
@@ -14,7 +16,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   incomeExpenses: IncomeExpenses[] = [];
   incomeExpenseSubscription!: Subscription
 
-  constructor(private store: Store<AppStateWithIncomeExpense>) {
+  constructor(
+    private store: Store<AppStateWithIncomeExpense>,
+    private incomeExpenseService: IncomeExpenseService
+  ) {
   }
 
   ngOnInit(): void {
@@ -26,6 +31,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   delete(itemId: string) {
-    console.log(itemId);
+    this.incomeExpenseService.deleteIncomeExpense(itemId)
+      .then(() => Swal.fire('Borrado', 'Item borrado', 'success'))
+      .catch(err => Swal.fire('Error', err.message, 'error'))
   }
 }
