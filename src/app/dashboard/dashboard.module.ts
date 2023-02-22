@@ -11,6 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {StoreModule} from "@ngrx/store";
 
 import {incomeExpenseReducer} from "@app/dashboard/state/income-expense.reducer";
+import { IncomeExpensePipe } from './pipes/income-expense.pipe';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {incomeExpenseReducer} from "@app/dashboard/state/income-expense.reducer"
     DashboardComponent,
     IncomeExpensesComponent,
     StatisticsComponent,
-    DetailsComponent
+    DetailsComponent,
+    IncomeExpensePipe
   ],
   imports: [
     CommonModule,
