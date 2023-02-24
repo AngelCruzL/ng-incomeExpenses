@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 
-import {Store} from "@ngrx/store";
+import { AppState } from "@app/app.reducer";
+import { Store } from "@ngrx/store";
 import * as ui from "@shared/state/ui.actions";
-import {AppState} from "@app/app.reducer";
 
-import {Subscription} from "rxjs";
+import { Subscription } from "rxjs";
 
-import Swal from 'sweetalert2'
-import {getTranslatedError} from '@nafuzi/firebase-auth-error-translator'
+import { getTranslatedError } from '@nafuzi/firebase-auth-error-translator';
+import Swal from 'sweetalert2';
 
-import {AuthService} from "@auth/services/auth.service";
+import { AuthService } from "@auth/services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -55,8 +55,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.loginUser(this.loginForm.value)
       .then(credentials => {
         this.store.dispatch(ui.stopLoading());
-        this.router.navigate(['/'])
-        console.log(credentials)
+        this.router.navigate(['/']);
       })
       .catch(error => {
         this.store.dispatch(ui.stopLoading());

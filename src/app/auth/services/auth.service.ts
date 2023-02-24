@@ -1,20 +1,30 @@
-import {Injectable} from '@angular/core';
-import {Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "@angular/fire/auth";
-import {addDoc, collection, collectionData, Firestore} from "@angular/fire/firestore";
-import {Observable, Subscription} from "rxjs";
-import {map} from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import {
+  Auth,
+  authState,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from '@angular/fire/auth';
+import {
+  addDoc,
+  collection,
+  collectionData,
+  Firestore,
+} from '@angular/fire/firestore';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {Store} from "@ngrx/store";
-import {AppState} from "@app/app.reducer";
-import * as authActions from "@auth/state/auth.actions";
-import * as incomeExpenseActions from "@app/dashboard/state/income-expense.actions";
+import { AppState } from '@app/app.reducer';
+import * as incomeExpenseActions from '@app/dashboard/state/income-expense.actions';
+import * as authActions from '@auth/state/auth.actions';
+import { Store } from '@ngrx/store';
 
-import {CreateUserData, LoginUserData} from "../types/user";
-import {User} from "../models/user.model";
-import {UserFirebase} from "@auth/types/user-firebase";
+import { UserFirebase } from '@auth/types/user-firebase';
+import { User } from '../models/user.model';
+import { CreateUserData, LoginUserData } from '../types/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   userSubscription!: Subscription;
@@ -23,8 +33,8 @@ export class AuthService {
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private store: Store<AppState>) {
-  }
+    private store: Store<AppState>
+  ) {}
 
   initAuthListener() {
     return authState(this.auth).subscribe(async (fuser: any) => {
@@ -32,54 +42,55 @@ export class AuthService {
 
       this.userSubscription = this.getUserById(fuser.uid).subscribe(user => {
         if (user.length > 0) {
-          const newUser = {...user[0], uid: fuser.uid}
-          this.store.dispatch(authActions.setUser({user: newUser}))
+          const newUser = { ...user[0], uid: fuser.uid };
+          this.store.dispatch(authActions.setUser({ user: newUser }));
           this.#currentUser = newUser;
         } else {
-          this.cleanUserStateAndSubscription()
+          this.cleanUserStateAndSubscription();
         }
-      })
-    })
+      });
+    });
   }
 
-  createUser({name, email, password}: CreateUserData) {
+  createUser({ name, email, password }: CreateUserData) {
     return createUserWithEmailAndPassword(this.auth, email, password)
-      .then(({user}) => {
-        console.log(user);
+      .then(({ user }) => {
         const newUser = new User(name, user.email!, user.uid!);
         const userRef = collection(this.firestore, user.uid);
-        addDoc(userRef, {...newUser}).then(console.log)
+        addDoc(userRef, { ...newUser }).then(console.log);
       })
       .catch(error => {
-        console.log(error);
+        console.warn(error);
         throw error;
-      })
+      });
   }
 
-  loginUser({email, password}: LoginUserData) {
-    return signInWithEmailAndPassword(this.auth, email, password)
+  loginUser({ email, password }: LoginUserData) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   logout() {
-    return this.auth.signOut()
+    return this.auth.signOut();
   }
 
   isAuth() {
-    return authState(this.auth).pipe(map(fuser => fuser != null))
+    return authState(this.auth).pipe(map(fuser => fuser != null));
   }
 
   getUserById(id: string): Observable<UserFirebase[]> {
     const userRef = collection(this.firestore, id);
-    return collectionData(userRef, {idField: 'uid'}) as Observable<UserFirebase[]>;
+    return collectionData(userRef, { idField: 'uid' }) as Observable<
+      UserFirebase[]
+    >;
   }
 
   cleanUserStateAndSubscription() {
     this.store.dispatch(authActions.unSetUser());
-    this.store.dispatch(incomeExpenseActions.unSetItems())
+    this.store.dispatch(incomeExpenseActions.unSetItems());
     this.userSubscription?.unsubscribe();
   }
 
   get currentUser() {
-    return {...this.#currentUser}
+    return { ...this.#currentUser };
   }
 }

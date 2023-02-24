@@ -1,21 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import {Store} from "@ngrx/store";
-import * as ui from "@shared/state/ui.actions";
-import {AppState} from "@app/app.reducer";
+import { AppState } from '@app/app.reducer';
+import { Store } from '@ngrx/store';
+import * as ui from '@shared/state/ui.actions';
 
-import {Subscription} from "rxjs";
+import { Subscription } from 'rxjs';
 
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
-import {AuthService} from "@auth/services/auth.service";
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styles: []
+  styles: [],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   registerForm!: FormGroup;
@@ -26,17 +26,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private store: Store<AppState>,
-    private router: Router) {
-  }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-    })
+    });
 
-    this.uiSubscription = this.store.select('ui').subscribe(ui => this.isLoading = ui.isLoading)
+    this.uiSubscription = this.store
+      .select('ui')
+      .subscribe(ui => (this.isLoading = ui.isLoading));
   }
 
   ngOnDestroy() {
@@ -52,29 +54,29 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(ui.isLoading());
 
-    this.authService.createUser(this.registerForm.value)
+    this.authService
+      .createUser(this.registerForm.value)
       .then(credentials => {
         this.store.dispatch(ui.stopLoading());
-        this.router.navigate(['/'])
-        console.log(credentials)
+        this.router.navigate(['/']);
       })
       .catch(error => {
         this.store.dispatch(ui.stopLoading());
 
         if (error.message.includes('(auth/weak-password)')) {
-          error.message = 'La contraseña debe tener al menos 6 caracteres.'
+          error.message = 'La contraseña debe tener al menos 6 caracteres.';
         }
 
         if (error.message.includes('(auth/email-already-in-use)')) {
-          error.message = 'El correo electrónico ya existe.'
+          error.message = 'El correo electrónico ya existe.';
         }
 
         Swal.fire({
           title: '¡Error!',
           text: error.message,
           icon: 'error',
-          confirmButtonText: 'Ok'
-        })
-      })
+          confirmButtonText: 'Ok',
+        });
+      });
   }
 }
