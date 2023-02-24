@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-6">
+  <div class="col-6 col-lg-4">
     <div class="card card-statistics">
       <div class="card-body">
         <div class="clearfix">
@@ -9,7 +9,9 @@
           <div class="float-right">
             <p class="mb-0 text-right">Ingresos</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">{{totalIncomes|currency}}</h3>
+              <h3 class="font-weight-medium text-right mb-0">
+                {{ totalIncomes | currency }}
+              </h3>
             </div>
           </div>
         </div>
@@ -21,7 +23,7 @@
     </div>
   </div>
 
-  <div class="col-6">
+  <div class="col-6 col-lg-4">
     <div class="card card-statistics">
       <div class="card-body">
         <div class="clearfix">
@@ -31,7 +33,9 @@
           <div class="float-right">
             <p class="mb-0 text-right">Egresos</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">{{totalExpenses|currency}}</h3>
+              <h3 class="font-weight-medium text-right mb-0">
+                {{ totalExpenses | currency }}
+              </h3>
             </div>
           </div>
         </div>
@@ -44,13 +48,10 @@
   </div>
 </div>
 
-
-<div class="row m-5">
-
+<div class="row my-5">
   <div class="col-12">
     <div class="card card-statistics">
       <div class="card-body">
-
         <div class="clearfix">
           <div class="float-left">
             <i class="fa fa-building text-info icon-lg"></i>
@@ -58,11 +59,13 @@
           <div class="float-right">
             <p class="mb-0 text-right">Diferencia</p>
             <div class="fluid-container">
-              <h3 [ngClass]="{
-                      'text-success': totalIncomes - totalExpenses >= 0,
-                      'text-danger': totalIncomes - totalExpenses < 0
-                    }"
-                  class="font-weight-medium text-right mb-0">
+              <h3
+                [ngClass]="{
+                  'text-success': totalIncomes - totalExpenses >= 0,
+                  'text-danger': totalIncomes - totalExpenses < 0
+                }"
+                class="font-weight-medium text-right mb-0"
+              >
                 {{ totalIncomes - totalExpenses | currency }}
               </h3>
             </div>
@@ -72,7 +75,10 @@
     </div>
   </div>
 
-  <div class="col-12 p-5" *ngIf="incomes > 0 || expenses > 0">
+  <div
+    class="col-12 col-lg-6 col-xxl-4 p-5"
+    *ngIf="incomes > 0 || expenses > 0"
+  >
     <div class="card card-statistics">
       <div class="card-body">
         <h1 class="card-title">Gráfica</h1>
@@ -81,7 +87,8 @@
           baseChart
           class="chart"
           [data]="doughnutChartData"
-          type="doughnut">
+          type="doughnut"
+        >
         </canvas>
       </div>
     </div>
