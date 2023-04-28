@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+  }
+
+  .sidebar.sidebar-offcanvas {
+    display: none;
+  }
+}
