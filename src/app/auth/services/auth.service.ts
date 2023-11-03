@@ -23,6 +23,9 @@ import { UserFirebase } from '@auth/types/user-firebase';
 import { User } from '../models/user.model';
 import { CreateUserData, LoginUserData } from '../types/user';
 
+/**
+ * Service to manage the authentication of the user
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -30,13 +33,29 @@ export class AuthService {
   userSubscription!: Subscription;
   #currentUser!: User;
 
+  /**
+   * Make the dependency injection of the Auth, Firestore and Store
+   * @param auth
+   * @param firestore
+   * @param store
+   */
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {}
 
-  initAuthListener() {
+  /**
+   * Get the current user
+   */
+  get currentUser(): User {
+    return { ...this.#currentUser };
+  }
+
+  /**
+   * Initialize the listener of the authentication state
+   */
+  initAuthListener(): Subscription {
     return authState(this.auth).subscribe(async (fuser: any) => {
       if (!fuser) return this.cleanUserStateAndSubscription();
 
@@ -52,6 +71,9 @@ export class AuthService {
     });
   }
 
+  /**
+   * Create a new user in firebase
+   */
   createUser({ name, email, password }: CreateUserData) {
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then(({ user }) => {
@@ -65,18 +87,30 @@ export class AuthService {
       });
   }
 
+  /**
+   * Login the user
+   */
   loginUser({ email, password }: LoginUserData) {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
 
+  /**
+   * Logout the user
+   */
   logout() {
     return this.auth.signOut();
   }
 
-  isAuth() {
+  /**
+   * Check if user is authenticated
+   */
+  isAuth(): Observable<boolean> {
     return authState(this.auth).pipe(map(fuser => fuser != null));
   }
 
+  /**
+   * Get firebase user by id
+   */
   getUserById(id: string): Observable<UserFirebase[]> {
     const userRef = collection(this.firestore, id);
     return collectionData(userRef, { idField: 'uid' }) as Observable<
@@ -84,13 +118,12 @@ export class AuthService {
     >;
   }
 
-  cleanUserStateAndSubscription() {
+  /**
+   * Clean the user state and unsubscribe the user subscription
+   */
+  cleanUserStateAndSubscription(): void {
     this.store.dispatch(authActions.unSetUser());
     this.store.dispatch(incomeExpenseActions.unSetItems());
     this.userSubscription?.unsubscribe();
-  }
-
-  get currentUser() {
-    return { ...this.#currentUser };
   }
 }
